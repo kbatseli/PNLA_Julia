@@ -51,13 +51,12 @@ for i=1:neq
  end
 end 
 
-M=sparse(vec(I),vec(J),vec(V),q,p)
+M=sparse(vec(J),vec(I),vec(V),p,q)
 end
-
 
 function getMDim(polysys,d)
 n=size(polysys[1,2],2)
 q=binomial(d+n,n)
-p=sum([binomial(d-max(sum(polysys[i,2],2))+n,n) for i=1:size(polysys,1)])
-return q,p
+p=sum([binomial(d-maximum(sum(polysys[i,2],2))+n,n) for i=1:size(polysys,1)])
+return p,q
 end

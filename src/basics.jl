@@ -7,8 +7,10 @@ index=index+1
 end
 
 function feti(exponent)
+# k is number of monomials, n is number of variables
 (k,n)=size(exponent)
 index=zeros(1,k)
+# formula only works because binomial(k,n) returns 0 when k<n
 [index[j] = sum([binomial(sum(exponent[j,i+1:n])-1+n-i,n-i) for i=0:n-1])+1 for j=1:k]
 end
 
@@ -38,9 +40,13 @@ return exponent
 end
 
 function getD0(polysys)
-max([max(sum(polysys[i,2],2)) for i=1:size(polysys,1)])
+maximum([maximum(sum(polysys[i,2],2)) for i=1:size(polysys,1)])
 end
 
 function getDorig(polysys)
-[max(sum(polysys[i,2],2)) for i=1:size(polysys,1)]
+[maximum(sum(polysys[i,2],2)) for i=1:size(polysys,1)]
+end
+
+function getDreg(polysys)
+sum([maximum(sum(polysys[i,2],2)) for i=1:size(polysys,1)])-size(polysys[1,2],2)+1
 end
