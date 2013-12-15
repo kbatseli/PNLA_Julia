@@ -71,10 +71,7 @@ for i=1:s
  polysys[i,1]=polysys[i,1]/norm(polysys[i,1],1);
 end
 
-# if M is sparse column compressed than accessing columns
-# is faster than rows
-
-initialM=getM(polysys,d); # non sparse version for test
+initialM=getM(polysys,d);
 p, q=size(initialM);
 
 tol=max(p,q)*eps(sqrt(s));
@@ -106,7 +103,9 @@ tempI=setdiff(nindex,pivotI);
 # make the new M
 # M=spalloc(p-1,q-1,nnz(initialM));  use spzeros instead
 M=spzeros(p-1,q-1)
-M[:,1:length(zindex)]=initialM[2:end,zindex];
+if ~isempty(zindex)
+	M[:,1:length(zindex)]=initialM[2:end,zindex];
+end
 
 # finish M and remaining indices/values for initialN
 for j=1:length(tempI)
@@ -137,12 +136,16 @@ for i=1:p
 
         tempM=M;
         M=spzeros(p-1,q-1)
-        M[:,1:length(zindex)]=tempM[2:end,zindex];
+		if ~isempty(zindex)
+			M[:,1:length(zindex)]=tempM[2:end,zindex];
+		end
         
         tempN=N;
         # N=spalloc(size(N,1),q-1,nnz(tempN));
         N=spzeros(size(N,1),q-1)
-		N[:,1:length(zindex)]=tempN[:,zindex];
+		if ~isempty(zindex)
+			N[:,1:length(zindex)]=tempN[:,zindex];
+		end
 
         for j=1:length(tempI)
             # remaining columns of M            
